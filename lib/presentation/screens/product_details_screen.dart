@@ -1,6 +1,7 @@
 import 'package:crafty_bay/data/models/cart_model.dart';
 import 'package:crafty_bay/data/models/product_details_model.dart';
 import 'package:crafty_bay/presentation/state_holders/add_to_cart_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/add_to_wish_list_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/product_details_controller.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/widgets/centered_circular_progress_indicator.dart';
@@ -49,8 +50,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               );
             }
 
-            ProductDetailsModel productDetails = productDetailController
-                .productDetailsModel;
+            ProductDetailsModel productDetails =
+                productDetailController.productDetailsModel;
             List<String> colors = productDetails.color?.split(',') ?? [];
             List<String> sizes = productDetails.size?.split(',') ?? [];
             _selectedSize = sizes.first;
@@ -122,9 +123,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     fontWeight: FontWeight.w600, fontSize: 16),
                               ),
                               const SizedBox(height: 16),
-                              Text(productDetails.product?.shortDes ?? '',),
+                              Text(
+                                productDetails.product?.shortDes ?? '',
+                              ),
                               const SizedBox(height: 8),
-                              Text(productDetails.des ?? '',),
+                              Text(
+                                productDetails.des ?? '',
+                              ),
                             ],
                           ),
                         )
@@ -135,8 +140,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 _buildAddToCartSection(productDetails)
               ],
             );
-          }
-      ),
+          }),
     );
   }
 
@@ -218,7 +222,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ],
         ),
         TextButton(onPressed: () {}, child: const Text('Reviews')),
-        const WishButton(showAddToWishlist: true)
+        GetBuilder<AddToWishListController>(
+          builder: (addToWishListController) {
+            if (addToWishListController.inProgress) {
+              return Transform.scale(
+                  scale: 0.4, child: const CircularProgressIndicator());
+            }
+
+            return WishButton(
+              showAddToWishlist: true,
+              onTap: () {
+                addToWishListController.addToWishList(widget.productId);
+              },
+            );
+          },
+        )
       ],
     );
   }

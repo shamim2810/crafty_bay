@@ -33,7 +33,7 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
   Widget _buildCarouselSlider() {
     return CarouselSlider(
       options: CarouselOptions(
-          height: 190,
+          height: 180,
           viewportFraction: 1,
           onPageChanged: (index, _) {
             _selectedPageIndex.value = index;
